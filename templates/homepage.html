@@ -1,0 +1,25 @@
+{% extends "site_base.html" %}
+
+{% block content %}
+  {{ form.as_p }}
+
+<div id="photobooth"></div>
+<div id="photopreview"></div>
+    <input id="photo" type="text" />
+
+
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+$(document).ready(function(){
+	$( '#photobooth' ).photobooth().on( "image", function( event, dataUrl ){
+		$( "#photopreview" ).show().html( '<img src="' + dataUrl + '" >');
+		$("#photo").val(dataUrl);
+	});
+    if( !$( '#photobooth' ).data( "photobooth" ).isSupported ){
+	    alert("Webcam/Browser not supported")
+    }
+    $( '#photobooth' ).data( "photobooth" ).forceHSB = true;
+});
+</script>
+{% endblock %}
