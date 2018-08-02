@@ -15,15 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import TestView
+from .  import views
 
 from django.conf import settings
-
-
 
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', TestView.as_view(template_name='homepage.html')),
+    path('', views.get_name),
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

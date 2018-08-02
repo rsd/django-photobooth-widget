@@ -6,6 +6,7 @@
     {% block extra_head_base %}
       {% block extra_head %}{% endblock extra_head %}
     {% endblock extra_head_base %}
+    {{form.media.css}}
   </head>
   <body class="{% block body_class %}{% endblock %}">
     <noscript>
@@ -27,5 +28,6 @@
         {% block extra_body %}{% endblock %}
       {% endblock extra_body_base %}
     {% endblock body %}
+    {{form.media.js}}
   </body>
 </html>
