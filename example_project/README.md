@@ -30,6 +30,7 @@ B. Create the Example Project
  * django_extensions - For runserver_plus
  * photobooh_widget
  * test_app
+*  django.forms
  
 4. Added FORM_RENDERER tp settings.py:  
  

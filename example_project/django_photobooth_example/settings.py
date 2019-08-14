@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_photobooth_widget',
     'test_app',
+    'django.forms',
 ]
 
 MIDDLEWARE = [
