@@ -25,7 +25,7 @@ SECRET_KEY = '5s&uprcz72s#2185%4_p2q4q()&ky1jt1lt!c@j%m0rjk#wmwm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_photobooth_widget',
     'test_app',
-    'django.forms',
 ]
 
 MIDDLEWARE = [
@@ -70,8 +69,6 @@ TEMPLATES = [
         },
     },
 ]
-
-FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 WSGI_APPLICATION = 'django_photobooth_example.wsgi.application'
 
@@ -124,3 +121,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(os.path.dirname(BASE_DIR), 'static'),
+]
