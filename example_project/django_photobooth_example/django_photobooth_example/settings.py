@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'django_photobooth_widget',
+    'test_app',
 ]
 
 MIDDLEWARE = [
