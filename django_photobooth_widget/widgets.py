@@ -87,7 +87,7 @@ class PhotoBooth(forms.Widget):
               staticfiles_storage.url('photobooth_widget/js/photobooth_activate.js'),
               )
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             value = ""
         output = render_to_string("photobooth_widget/photobooth_widget.html", {"name": name, "value": value})
