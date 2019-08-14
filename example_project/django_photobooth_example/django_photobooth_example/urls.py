@@ -18,6 +18,6 @@ from django.urls import path
 from django_photobooth_widget import views
 
 urlpatterns = [
-    path('', views.get_name())
+    path('', views.get_name()),
     path('admin/', admin.site.urls),
 ]
