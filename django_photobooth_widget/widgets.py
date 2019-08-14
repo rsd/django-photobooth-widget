@@ -74,7 +74,7 @@ class PhotoBoothField(forms.CharField):
 
 
 class PhotoBooth(forms.Widget):
-    template_name = "templates/photobooth_widget.html"
+    template_name = "photobooth_widget/photobooth_widget.html"
 
     class Media:
         css = {
@@ -90,5 +90,5 @@ class PhotoBooth(forms.Widget):
     def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             value = ""
-        output = render_to_string("photobooth_widget/photobooth_widget.html", {"name": name, "value": value})
+        output = render_to_string(self.template_name, {"name": name, "value": value})
         return mark_safe(output)
