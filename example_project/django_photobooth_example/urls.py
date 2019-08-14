@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django_photobooth_widget import views
+from test_app import views
 
 urlpatterns = [
     path('', views.get_name),
     path('admin/', admin.site.urls),
+    path('test/', views.get_name)
 ]
