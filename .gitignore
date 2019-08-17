@@ -4,3 +4,6 @@ venv
 cert.crt
 cert.key
 example_project/static
+build
+dist
+django_photobooth_widget.egg-info
