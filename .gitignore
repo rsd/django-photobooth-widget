@@ -3,3 +3,4 @@ __pycache__
 venv
 cert.crt
 cert.key
+example_project/static
