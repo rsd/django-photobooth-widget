@@ -1,0 +1,12 @@
+{% extends "site_base.html" %}
+
+{% block content %}
+    <h1>Take a new Selfie!</h1>
+    <p>Make sure to allow the use of your device camera.</p>
+    <ul>
+        <form action="" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Take Selfie!" />
+        </form>
+  </ul>
+{% endblock %}

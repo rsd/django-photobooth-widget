@@ -70,4 +70,4 @@ def get_name(request):
     else:
         form = TestForm()
 
-    return render(request, 'test_app/homepage.html', {'form': form})
+    return render(request, 'homepage.html', {'form': form})

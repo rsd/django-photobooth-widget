@@ -1,0 +1,16 @@
+{% extends "site_base.html" %}
+
+{% block content %}
+  <h1>Selfie List</h1>
+  {% if selfie_list %}
+  <ul>
+    {% for selfie in selfie_list %}
+      <li>
+        <a href="{{ selfie.get_absolute_url }}">{{ selfie.title }}</a> ({{selfie.author}})
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no selfies in the library.</p>
+  {% endif %}
+{% endblock %}
