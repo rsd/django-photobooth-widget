@@ -4,12 +4,12 @@ from django import forms
 from django.views.generic import FormView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .widgets import PhotoBoothField, PhotoBooth
+from .widgets import PhotoboothModelField, PhotoboothWidget
 
 
 class TestForm(forms.Form):
     your_name = forms.CharField(label='Your name', max_length=100)
-    photo = PhotoBoothField(widget=PhotoBooth, required=False)
+    #photo = PhotoboothModelField(widget=PhotoboothWidget, required=False)
 
 
 class TestView(FormView):

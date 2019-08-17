@@ -1,3 +1,4 @@
+from django.db import models
 from django import forms
 from django.utils.safestring import mark_safe
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -7,11 +8,12 @@ import base64
 
 PHOTOBOOTH_DATASTREAM_PREFIX="data:image/png;base64"
 
-class PhotoBoothImage():
+class PhotoboothImage():
     def __init__(self, image=None):
         self._base64_image = None
         self._raw_image = None
         self.has_image = False
+
         if image is not None:
             if isinstance(image,str):
                 print ("string")
@@ -40,21 +42,36 @@ class PhotoBoothImage():
             self.has_image = False
         return self._raw_image
 
-class PhotoBoothField(forms.CharField):
-    def __init__(self, *, max_length=None, min_length=None, strip=True, empty_value='', **kwargs):
-        forms.CharField.__init__(self, max_length=max_length, min_length=min_length, strip=strip,
-                                 empty_value=empty_value, **kwargs)
-        print(vars(self))
-        self.photobooth = PhotoBoothImage()
 
-    def validate(self, value):
+# Model Field
+
+# FIXME: Transform in a ImageField
+class PhotoboothModelField(models.ImageField):
+
+    description = "A photo taken by the device camera"
+
+    def __init__(self, *args, **kwargs):
+        #kwargs['max_length'] = 104
+        super().__init__(*args, **kwargs)
+        #print(vars(self))
+        self.photobooth = PhotoboothImage()
+
+    def __str__(self):
+        return "Photobooth Image Field"
+
+    def formfield(self, **kwargs):
+        defaults = {'form_class': PhotoboothFormField}
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
+
+    def wvalidate(self, value):
         print("In validate")
-        super(PhotoBoothField, self).validate(value)
+        super().validate(value)
 
 #    def to_python(self, value):
 #        print ("In to_python ")
 #        if value:
-#            self.photobooth = PhotoBoothImage(value)
+#            self.photobooth = PhotoboothImage(value)
 #            return self.photobooth.raw_image()
 
 
@@ -72,8 +89,21 @@ class PhotoBoothField(forms.CharField):
 #            print ("no image")
 #        return "Prepare Value"
 
+# Form Field
+class PhotoboothFormField(forms.Field):
 
-class PhotoBooth(forms.Widget):
+    def __init__(self, *args, **kwargs):
+        defaults = {}
+        defaults.update(kwargs)
+        if "max_length" in defaults:
+            del defaults["max_length"]
+            print("deleting defaults")
+
+        super().__init__(*args, **defaults)
+        self.widget = PhotoboothWidget()
+
+# Widget
+class PhotoboothWidget(forms.Widget):
     template_name = "photobooth_widget/photobooth_widget.html"
 
     class Media:
@@ -83,9 +113,14 @@ class PhotoBooth(forms.Widget):
                     'photobooth_widget/css/photobooth_widget.css',
                     ),
                 )}
-        js = (staticfiles_storage.url('photobooth_widget/js/photobooth_min.js'),
-              staticfiles_storage.url('photobooth_widget/js/photobooth_activate.js'),
+        js = ( staticfiles_storage.url('photobooth_widget/js/photobooth_min.js'),
+               staticfiles_storage.url('photobooth_widget/js/photobooth_activate.js'),
               )
+
+    def __init__(self, attrs=None, *args, **kwargs):
+        attrs = attrs or {}
+        super().__init__(attrs)
+    
 
     def render(self, name, value, attrs=None, renderer=None):
         if value is None:
