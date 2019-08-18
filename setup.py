@@ -6,11 +6,15 @@ __version__ = '.'.join(map(str, VERSION))
 
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
+with open("README.md", "r") as readme:
+    long_description = readme.read()
+
 setup(
     name='django-photobooth-widget',
     version=__version__,
-    description="A device camera picture capture widget for Django",
-    long_description="A widget based on photobooth.js to take photos from the user's device camera.",
+    description="A widget based on photobooth.js to take photos from the user's device camera.",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Raul Dias",
     author_email="raul@dias.com.br",
     url="https://github.com/rsd/django-photobooth-widget.git",
@@ -28,8 +32,9 @@ setup(
         "Framework :: Django",
         "Programming Language :: Python",
         "Natural Language :: English",
-        'Topic :: Internet :: WWW/HTTP',
-        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        "Topic :: Internet :: WWW/HTTP",
+        "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+        "Operating System :: OS Independent",
     ],
 )
 
