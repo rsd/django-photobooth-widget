@@ -57,9 +57,8 @@ class PhotoboothModelField(models.BinaryField):
     description = "A photo taken by the device camera"
 
     def __init__(self, *args, **kwargs):
-        #kwargs['max_length'] = 104
+        kwargs['editable'] = True
         super().__init__(*args, **kwargs)
-        #print(vars(self))
         self.photobooth = PhotoboothImage()
 
     def __str__(self):

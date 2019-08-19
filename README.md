@@ -7,6 +7,12 @@ Usage
 * Make sure `'APP_DIRS': True`, enabled in TEMPLATES.
 * `STATIC_ROOT` needs to be ser to collect stati files with:
    > `$ python collectstatic`
+   
+Options
+-------
+Use django_photobooth_widget.PHOTOBOOTH_DB_SAVE_AS_BINARY to choose
+between binary and text (mime/base64) data. Defaults to binary.
+
 
 Test Photobooth
 ---------------
