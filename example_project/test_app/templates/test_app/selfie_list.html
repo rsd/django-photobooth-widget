@@ -7,7 +7,7 @@
     {% for selfie in selfie_list %}
       <div class="selfie">
         <h3>{{ selfie.title }}</h3>
-        <img src="{{ selfie.photo }}">
+        <img src="{{ selfie.photo.base64_image }}">
         <p>By {{ selfie.your_name }} on {{selfie.created_on}}</p>
         <p>{{ selfie.description }}</p>
       </div>

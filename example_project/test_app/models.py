@@ -5,7 +5,7 @@ from django_photobooth_widget.widgets import PhotoboothWidget, PhotoboothModelFi
 
 class Selfie(models.Model):
     #photo = PhotoBoothField(widget=PhotoBoothWidget, required=False)
-    photo = PhotoboothModelField(null=True)
+    photo = PhotoboothModelField(null=True, editable=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)

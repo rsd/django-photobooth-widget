@@ -8,6 +8,9 @@ import base64
 
 PHOTOBOOTH_DATASTREAM_PREFIX="data:image/png;base64"
 
+#TODO: make this flag per instance
+PHOTOBOOTH_DB_SAVE_AS_BINARY=True
+
 class PhotoboothImage():
     def __init__(self, image=None):
         self._base64_image = None
@@ -16,37 +19,40 @@ class PhotoboothImage():
 
         if image is not None:
             if isinstance(image,str):
-                print ("string")
                 self.base64_image(image)
-#            else:
-#                print (type(image))
-#                self.raw_image(image)
+            elif isinstance(image, bytes):
+                self.raw_image(image)
 
     def base64_image(self, base64_image=None):
         if base64_image is not None:
-            photo = base64_image.split(",")
-            if photo[0] == PHOTOBOOTH_DATASTREAM_PREFIX:
-                base64_image = photo[1]
+            if isinstance(base64_image, str):
+                photo = base64_image.split(",")
+                if photo[0] == PHOTOBOOTH_DATASTREAM_PREFIX:
+                    base64_image = photo[1]
 
-            #TODO: have to validade base64
-            self._base64_image = base64_image
-            self._raw_image = base64.b64decode(base64_image)
-            self.has_image = True
+                #TODO: have to validate base64
+                self._raw_image = base64.b64decode(base64_image)
+                self._base64_image = PHOTOBOOTH_DATASTREAM_PREFIX + "," + base64_image
+                self.has_image = True
+            elif isinstance(base64_image, bytes):
+                self.raw_image(base64_image)
         return self._base64_image
 
     def raw_image(self, raw_image=None):
-        print (raw_image)
         if raw_image is not None:
-            self._raw_image = raw_image
-            self._base64_image = base64.b64encode(raw_image)
-            self.has_image = False
+            if isinstance(raw_image, bytes):
+                self._raw_image = raw_image
+                self._base64_image = PHOTOBOOTH_DATASTREAM_PREFIX + "," + base64.b64encode(raw_image).decode()
+                self.has_image = True
+            elif isinstance(raw_image, str):
+                self.base64_image(raw_image)
         return self._raw_image
 
 
 # Model Field
 
 # FIXME: Transform in a ImageField
-class PhotoboothModelField(models.ImageField):
+class PhotoboothModelField(models.BinaryField):
 
     description = "A photo taken by the device camera"
 
@@ -64,30 +70,33 @@ class PhotoboothModelField(models.ImageField):
         defaults.update(kwargs)
         return super().formfield(**defaults)
 
-    def wvalidate(self, value):
-        print("In validate")
-        super().validate(value)
+    def _convert_to_photobooth(self, value):
+        photobooth = PhotoboothImage()
+        if PHOTOBOOTH_DB_SAVE_AS_BINARY:
+            photobooth.raw_image(value)
+        else:
+            photobooth.base64_image(value)
+        self.photobooth = photobooth
+        return photobooth
 
-#    def to_python(self, value):
-#        print ("In to_python ")
-#        if value:
-#            self.photobooth = PhotoboothImage(value)
-#            return self.photobooth.raw_image()
+    def from_db_value(self, value, expression, connection):
+        if value is None:
+            return value
+        return self._convert_to_photobooth(value)
 
+    def to_python(self, value):
+        if isinstance(value, PhotoboothImage):
+            return value
+        if value is None:
+            return value
+        return self._convert_to_photobooth(value)
 
-#    def prepare_value(self, value):
-#        print ("In prepare_value " )
-#        print (type(value))
-#        if isinstance(value, str):
-#            print ("value: ")
-#            print (value)
-#        else:
-#            print ("Nao e str")
-#        if self.photobooth.has_image:
-#            return PHOTOBOOTH_DATASTREAM_PREFIX + "," + self.photobooth.base64_image()
-#        else:
-#            print ("no image")
-#        return "Prepare Value"
+    def get_prep_value(self, photobooth):
+        if PHOTOBOOTH_DB_SAVE_AS_BINARY:
+            return photobooth.raw_image()
+        else:
+            return photobooth.base64_image()
+
 
 # Form Field
 class PhotoboothFormField(forms.Field):
