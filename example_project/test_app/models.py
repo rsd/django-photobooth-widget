@@ -10,7 +10,6 @@ class Selfie(models.Model):
     description = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     your_name = models.CharField(max_length=100)
-    garbage = models.CharField(max_length=100)
 
     def get_absolute_url(self):
         return reverse('index')
