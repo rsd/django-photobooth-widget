@@ -3,13 +3,15 @@
 {% block content %}
   <h1>Selfie List</h1>
   {% if selfie_list %}
-  <ul>
+
     {% for selfie in selfie_list %}
-      <li>
-        <a href="{{ selfie.get_absolute_url }}">{{ selfie.title }}</a> ({{selfie.author}})
-      </li>
+      <div class="selfie">
+        <h3>{{ selfie.title }}</h3>
+        <img src="{{ selfie.photo }}">
+        <p>By {{ selfie.your_name }} on {{selfie.created_on}}</p>
+        <p>{{ selfie.description }}</p>
+      </div>
     {% endfor %}
-  </ul>
   {% else %}
     <p>There are no selfies in the library.</p>
   {% endif %}
